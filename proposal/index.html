@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Proposal for King Kanna · Station.Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&family=Libre+Franklin:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: the proposal wears King Kanna's look (black, the lion's purple and teal, Rye) so it reads as theirs; Station signs the bottom. */
+:root {
+  --night:#111014; --navy:#1b1922; --navy-2:#262232; --line:rgba(200,190,235,.16);
+  --blue:#6c5ce0; --blue-hi:#a99cff; --leaf:#34b594; --leaf-hi:#6fe0c2; --warn:#f0b04a; --bad:#f07a6a;
+  --sign:#ffffff; --ink:#121212; --text:#eeebf5; --text-2:#b3aec2; --muted:#8a8499;
+  --f-sign:'Rye', Georgia, 'Times New Roman', serif; --f-body:'Libre Franklin', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme:dark;
+}
+* { box-sizing:border-box }
+[hidden] { display:none !important }
+html { scroll-behavior:smooth }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto } }
+body { margin:0; background:var(--night); color:var(--text); font:16px/1.6 var(--f-body); -webkit-font-smoothing:antialiased }
+img { max-width:100%; height:auto; display:block }
+a { color:inherit }
+h1, h2, h3 { margin:0; font-weight:400; text-wrap:balance }
+p { margin:0 }
+:focus-visible { outline:3px solid var(--leaf-hi); outline-offset:3px }
+.wrap { max-width:1080px; margin:0 auto; padding-inline:20px }
+.label { font:700 12px/1 var(--f-body); letter-spacing:.16em; text-transform:uppercase; color:var(--leaf-hi) }
+.btn { display:inline-flex; align-items:center; gap:8px; font:700 15px/1 var(--f-body); text-decoration:none; padding:14px 20px; border-radius:6px; border:2px solid transparent }
+.btn-leaf { background:var(--leaf); color:var(--ink) }
+.btn-ghost { border-color:var(--line) }
+.sign { background:var(--sign); border-radius:6px; padding:6px 9px; display:inline-block; box-shadow:0 0 0 2px var(--navy-2), 0 0 0 3px var(--line) }
+.sign img { width:110px }
+
+header.top { border-bottom:1px solid var(--line) }
+header.top .wrap { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; padding-block:14px }
+header.top span.by { font-size:13px; color:var(--text-2) }
+
+.cover .wrap { padding-block:clamp(44px,7vw,84px) 40px; display:flex; flex-direction:column; gap:22px }
+.cover h1 { font:400 clamp(34px,5.6vw,68px)/1 var(--f-sign) }
+.cover h1 em { font-style:normal; color:var(--bad) }
+.cover p.lede { font-size:clamp(17px,1.8vw,20px); color:var(--text-2); max-width:62ch }
+.meta { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden }
+.meta div { background:var(--navy); padding:14px 16px; display:flex; flex-direction:column; gap:4px; font-size:14.5px }
+.meta span { font:700 11px/1 var(--f-body); letter-spacing:.14em; text-transform:uppercase; color:var(--muted) }
+.toc { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:14px; font-weight:600 }
+.toc a { color:var(--text-2); text-decoration:none }
+.toc a:hover { color:var(--text) }
+
+section { padding-block:clamp(44px,6vw,72px); border-top:1px solid var(--line) }
+.sec-head { display:flex; flex-direction:column; gap:10px; margin-bottom:28px; max-width:760px }
+.sec-head h2 { font:400 clamp(28px,3.8vw,44px)/1.02 var(--f-sign) }
+.sec-head p { color:var(--text-2); font-size:17px }
+
+.short { display:grid; grid-template-columns:1.3fr .7fr; gap:28px; align-items:start }
+.short > * { min-width:0 }
+.short p { color:var(--text-2); font-size:17px }
+.short p + p { margin-top:14px }
+.short p b { color:var(--text) }
+.price { background:var(--navy); border:1px solid var(--line); border-radius:10px; padding:22px; display:flex; flex-direction:column; gap:12px }
+.price .big { font:400 54px/1 var(--f-sign); color:var(--leaf-hi) }
+.price .sub { font-size:13.5px; color:var(--text-2) }
+.price ul { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px; font-size:14.5px; border-top:1px dashed var(--line); padding-top:12px }
+.price li { padding-left:20px; position:relative }
+.price li::before { content:""; position:absolute; left:2px; top:.55em; width:9px; height:5px; border-left:2px solid var(--leaf-hi); border-bottom:2px solid var(--leaf-hi); transform:rotate(-45deg) }
+
+.frame { border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--navy) }
+.frame-bar { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--line); font-size:13px; color:var(--text-2) }
+.frame iframe { display:block; width:100%; height:min(78vh,760px); border:0; background:var(--night) }
+.built { margin-top:22px; display:grid; grid-template-columns:repeat(3,1fr); gap:16px }
+.built div { background:var(--navy); border:1px solid var(--line); border-radius:10px; padding:18px; display:flex; flex-direction:column; gap:6px }
+.built h3 { font:700 17px/1.3 var(--f-body) }
+.built p { font-size:14.5px; color:var(--text-2) }
+
+.audit { display:grid; grid-template-columns:.8fr 1.2fr; gap:28px; align-items:start }
+.audit > * { min-width:0 }
+.score { background:var(--navy); border:1px solid var(--line); border-radius:10px; padding:22px; display:flex; flex-direction:column; gap:12px }
+.score .n { font:400 64px/1 var(--f-sign) }
+.score .n small { font:700 16px var(--f-body); color:var(--text-2); margin-left:6px }
+.mb { display:grid; grid-template-columns:124px 1fr 30px; align-items:center; gap:10px; font-size:13.5px; color:var(--text-2) }
+.mb i { height:7px; background:rgba(160,190,235,.1); border-radius:999px; overflow:hidden; display:block }
+.mb b { display:block; height:100%; background:var(--blue-hi); border-radius:999px }
+.mb em { font-style:normal; font-weight:700; text-align:right; color:var(--text) }
+.score p { font-size:13px; color:var(--muted) }
+.finds { display:flex; flex-direction:column; gap:12px }
+.find { background:var(--navy); border:1px solid var(--line); border-left:4px solid var(--bad); border-radius:10px; padding:16px 18px; display:flex; flex-direction:column; gap:6px }
+.find.good { border-left-color:var(--leaf) }
+.find .k { font:700 11px/1 var(--f-body); letter-spacing:.14em; text-transform:uppercase; color:var(--bad) }
+.find.good .k { color:var(--leaf-hi) }
+.find h3 { font:700 17.5px/1.35 var(--f-body) }
+.find p { font-size:15px; color:var(--text-2) }
+.find code { font-size:13px; background:rgba(160,190,235,.1); padding:1px 5px; border-radius:4px }
+
+.tbl { overflow-x:auto; border:1px solid var(--line); border-radius:10px }
+table { border-collapse:collapse; width:100%; font-size:15px; font-variant-numeric:tabular-nums }
+th { font:700 11px/1 var(--f-body); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); text-align:left; padding:12px 14px; border-bottom:1px solid var(--line); white-space:nowrap }
+td { padding:12px 14px; border-bottom:1px solid var(--line); vertical-align:top }
+tr:last-child td { border-bottom:0 }
+tr.you td { color:var(--leaf-hi); font-weight:700 }
+td.num { white-space:nowrap }
+
+.plan { display:grid; grid-template-columns:repeat(2,1fr); gap:16px }
+.plan div { background:var(--navy); border:1px solid var(--line); border-radius:10px; padding:20px; display:flex; flex-direction:column; gap:8px }
+.plan h3 { font:400 20px/1.1 var(--f-sign); color:var(--blue-hi) }
+.plan p { font-size:15px; color:var(--text-2) }
+
+.inv td:last-child { text-align:right; white-space:nowrap; font-weight:700 }
+.inv tr.total td { font-size:17px; color:var(--leaf-hi) }
+.inv td small { display:block; color:var(--muted); font-weight:400; font-size:13px }
+
+.steps { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; counter-reset:s }
+.steps div { counter-increment:s; border-top:3px solid var(--blue); padding-top:16px; display:flex; flex-direction:column; gap:6px }
+.steps div::before { content:counter(s); font:400 30px/1 var(--f-sign); color:var(--blue-hi) }
+.steps h3 { font:700 17px/1.3 var(--f-body) }
+.steps p { font-size:15px; color:var(--text-2) }
+
+.need { margin:0; padding:0; list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:10px 28px }
+.need li { padding:12px 0 12px 30px; border-bottom:1px solid var(--line); position:relative; font-size:15.5px }
+.need li::before { content:""; position:absolute; left:0; top:15px; width:16px; height:16px; border:2px solid var(--blue-hi); border-radius:4px }
+.need li small { display:block; color:var(--text-2); font-size:13.5px }
+.rules { margin-top:24px; font-size:14px; color:var(--text-2); background:var(--navy); border:1px solid var(--line); border-radius:10px; padding:16px 18px }
+
+.close { background:var(--sign); color:var(--ink); border-top:0 }
+.close .wrap { display:flex; flex-direction:column; gap:18px; align-items:flex-start }
+.close h2 { font:400 clamp(30px,4.4vw,52px)/1 var(--f-sign); color:#3b2f9e }
+.close p { font-size:17px; max-width:60ch }
+.close .mail { font:700 20px var(--f-body); color:#3b2f9e; user-select:all }
+.close .btn-leaf { background:#3b2f9e; color:#fff }
+
+footer { padding-block:28px 40px; font-size:12.5px; color:var(--muted) }
+footer .wrap { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px }
+footer a { color:var(--text-2) }
+
+@media (max-width:860px) {
+  .short, .audit { grid-template-columns:1fr }
+  .built, .steps { grid-template-columns:1fr }
+  .plan, .need { grid-template-columns:1fr }
+  .meta { grid-template-columns:1fr 1fr }
+  .frame iframe { height:640px }
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><span class="sign"><img src="../img/logo.png" alt="King Kanna Dispensary" width="529" height="330"></span><span class="by">Proposal · prepared by Station.Solutions</span></div></header>
+
+<main>
+  <div class="cover"><div class="wrap">
+    <span class="label">King Kanna · Campus Corner, Norman</span>
+    <h1>Leafly is telling patients you&rsquo;re <em>permanently closed.</em></h1>
+    <p class="lede">This is everything in one place: the new site we have already built for King Kanna, what we found online, and exactly what it takes to put it live.</p>
+    <div class="meta">
+      <div><span>Prepared for</span>King Kanna</div>
+      <div><span>Prepared by</span>Station.Solutions</div>
+      <div><span>Date</span>29 September 2026</div>
+      <div><span>Valid until</span>29 October 2026</div>
+    </div>
+    <nav class="toc" aria-label="Sections"><a href="#short">Summary</a><a href="#site">See the site</a><a href="#found">What we found</a><a href="#rivals">Who you&rsquo;re up against</a><a href="#plan">The plan</a><a href="#price">Investment</a><a href="#when">Timeline</a><a href="#need">What we need</a></nav>
+  </div></div>
+
+  <section id="short" aria-labelledby="short-h"><div class="wrap short">
+    <div>
+      <div class="sec-head" style="margin-bottom:16px"><span class="label">The short version</span><h2 id="short-h">The store changed its name. The internet didn&rsquo;t.</h2></div>
+      <p>Patients rate King Kanna highly: <b>212 Google reviews at 4.8 stars</b>. You&rsquo;re the closest dispensary to OU, and you&rsquo;re open until midnight. But the change from Okie Kush Club only reached Google. Leafly still lists the store under the old name and marks it <b>&ldquo;may be permanently closed&rdquo;</b>. kingkannaok.com, bought last December, doesn&rsquo;t load at all.</p>
+      <p>We have already built the site, using the photos from your own Instagram. It&rsquo;s live below as a private preview, hidden from Google. What&rsquo;s left is to put it on your domain, add it to Google, and clean up the old Okie Kush Club listings.</p>
+    </div>
+    <aside class="price" aria-label="Launch price">
+      <span class="label">To launch</span>
+      <span class="big">$1,500</span>
+      <span class="sub">one time · hosting &amp; care quoted monthly for your business</span>
+      <ul><li>The new site on your own domain</li><li>Live &ldquo;open now&rdquo; hours, call and directions</li><li>Patient gate and first-visit guide</li><li>Old Okie Kush Club listings fixed or retired</li></ul>
+    </aside>
+  </div></section>
+
+  <section id="site" aria-labelledby="site-h"><div class="wrap">
+    <div class="sec-head"><span class="label">Already built · private preview</span><h2 id="site-h">See the new site</h2><p>Scroll it right here, or open it full screen. It&rsquo;s hidden from Google until launch.</p></div>
+    <div class="frame">
+      <div class="frame-bar"><span>kingkannaok.com · preview</span><a href="../" target="_blank" rel="noopener">Open full screen &#8599;</a></div>
+      <iframe src="../" title="Preview of the new King Kanna website" loading="lazy"></iframe>
+    </div>
+    <div class="built">
+      <div><h3>Your own photos and words</h3><p>The banner, the lion, the neon and the storefront all come from @kingkannanorman. The shelf list uses your own posts: pre-rolls, pens, gummy packs, THC lemonade and CBD pet products.</p></div>
+      <div><h3>Sells the late hours</h3><p>A live line says &ldquo;Open now, until midnight&rdquo; on Norman&rsquo;s clock, with Call and Map one tap away. It also says cash only before anyone drives over.</p></div>
+      <div><h3>Built for the rules</h3><p>A patient gate at the door, a first-visit guide (license, photo ID, cash), and no health claims.</p></div>
+    </div>
+  </div></section>
+
+  <section id="found" aria-labelledby="found-h"><div class="wrap">
+    <div class="sec-head"><span class="label">Audit · 29 September 2026</span><h2 id="found-h">What we found</h2><p>We checked every point on the live web and in Google&rsquo;s own business data. The score measures how easily a patient can find, trust and reach you online. It isn&rsquo;t a rating of the store itself, which your reviews rate highly.</p></div>
+    <div class="audit">
+      <div class="score">
+        <span class="label">King Kanna</span>
+        <span class="n">47<small>/ 100</small></span>
+        <div class="mb"><span>Google listing</span><i><b style="width:65%"></b></i><em>65</em></div>
+        <div class="mb"><span>Reviews</span><i><b style="width:99%"></b></i><em>99</em></div>
+        <div class="mb"><span>Website</span><i><b style="width:0%"></b></i><em>0</em></div>
+        <div class="mb"><span>Local search</span><i><b style="width:32%"></b></i><em>32</em></div>
+        <div class="mb"><span>Tools</span><i><b style="width:0%"></b></i><em>0</em></div>
+        <p>Weights: listing 25%, reviews 25%, website 20%, local search 20%, tools 10%. Every score is computed by fixed rules from what we recorded.</p>
+      </div>
+      <div class="finds">
+        <div class="find good"><span class="k">Good news</span><h3>Patients love the store, and your Instagram is active.</h3><p>212 Google reviews at 4.8, with new ones in late August. Reviewers keep mentioning staff who explain the products. @kingkannanorman posts real photos of the store, which is exactly what a website needs.</p></div>
+        <div class="find"><span class="k">Name change</span><h3>Leafly shows &ldquo;Okie Kush Club&rdquo;, flagged as closed.</h3><p>Leafly lists 541 S University Blvd as &ldquo;Okie Kush Club &ndash; Norman&rdquo; and shows <b>&ldquo;This business may be permanently closed&rdquo;</b>, with no menu. JointCommerce also uses the old name and the wrong hours (Tuesday 10 AM&ndash;5 PM). Patients who check there are told you&rsquo;ve shut.</p></div>
+        <div class="find"><span class="k">Website</span><h3>kingkannaok.com was bought and never switched on.</h3><p>It was registered on 31 December 2025 and is on hold at the registrar, so it loads nothing for anyone. It renews on 31 December 2026. kingkanna.com belongs to a domain reseller, not you. Your Google listing has no website link at all.</p></div>
+        <div class="find"><span class="k">Menu</span><h3>No menu anywhere online.</h3><p>We found none on Weedmaps, Leafly or JointCommerce. Every one of the five dispensaries closest to you has a website or a Weedmaps page, and several show a menu there.</p></div>
+        <div class="find"><span class="k">Search</span><h3>A smaller shop beats you on your own corner.</h3><p>Gladiator Cannabis is a block away, with 22 reviews and a website. It outranks you for &ldquo;dispensary near OU&rdquo; and &ldquo;dispensary 73069&rdquo;. You&rsquo;re #4 for &ldquo;open late&rdquo; and &ldquo;best dispensary Norman&rdquo;, but #13 to #20 on the broad searches.</p></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section id="rivals" aria-labelledby="rivals-h"><div class="wrap">
+    <div class="sec-head"><span class="label">Campus Corner and nearby, on Google</span><h2 id="rivals-h">Who you&rsquo;re up against</h2></div>
+    <div class="tbl" tabindex="0" role="region" aria-label="Competitor comparison"><table>
+      <thead><tr><th>Dispensary</th><th>Distance</th><th>Online</th></tr></thead>
+      <tbody>
+        <tr><td>Gladiator Cannabis</td><td class="num">0.1 mi</td><td>Website; 22 reviews; ranks ahead of you near OU</td></tr>
+        <tr><td>Mango Cannabis</td><td class="num">0.5 mi</td><td>Website, live Dutchie menu, email list; 3,039 reviews</td></tr>
+        <tr><td>Blue Water Dispensary</td><td class="num">0.5 mi</td><td>Website</td></tr>
+        <tr><td>Proper Cannabis</td><td class="num">0.5 mi</td><td>Weedmaps page</td></tr>
+        <tr class="you"><td>King Kanna</td><td class="num">&ndash;</td><td>No website, no menu, old name on Leafly marked closed</td></tr>
+      </tbody>
+    </table></div>
+  </div></section>
+
+  <section id="plan" aria-labelledby="plan-h"><div class="wrap">
+    <div class="sec-head"><span class="label">What the $1,500 covers</span><h2 id="plan-h">The plan</h2></div>
+    <div class="plan">
+      <div><h3>1. Launch the site</h3><p>We finish the site above with your logo file and any photos you want to add, and put it live on kingkannaok.com. We help you lift the registrar hold, and you keep the domain.</p></div>
+      <div><h3>2. Finish the name change</h3><p>We claim the old Okie Kush Club listings on Leafly and JointCommerce. We update them to King Kanna with the right hours, or retire them, so nobody is told you&rsquo;re closed.</p></div>
+      <div><h3>3. Fix the Google listing</h3><p>We add the website, your own photos and a description. All ten photos on the listing today were uploaded by customers. Then Campus Corner searches can find you before Gladiator.</p></div>
+      <div><h3>4. Check it on every phone</h3><p>We test on iPhone and Android sizes and on desktop, with the patient gate, tap-to-call and directions all working before we switch it on.</p></div>
+    </div>
+  </div></section>
+
+  <section id="price" aria-labelledby="price-h"><div class="wrap">
+    <div class="sec-head"><span class="label">Investment</span><h2 id="price-h">One price to launch</h2></div>
+    <div class="tbl inv" tabindex="0" role="region" aria-label="Pricing"><table>
+      <thead><tr><th>Item</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr class="total"><td>Website launch<small>The site, domain switch-on, Leafly and JointCommerce clean-up, Google listing, search setup, testing</small></td><td>$1,500 one time</td></tr>
+        <tr><td>Hosting &amp; care<small>Keeping it online, secure and up to date, with changes as you need them</small></td><td>Quoted monthly</td></tr>
+        <tr><td>Live menu (optional)<small>Your menu on the site, fed from the system your register already uses</small></td><td>Quoted</td></tr>
+        <tr><td>Patient email list (optional)<small>Sign-ups at the counter and on the site, and a simple email for deals and giveaways</small></td><td>Quoted</td></tr>
+      </tbody>
+    </table></div>
+  </div></section>
+
+  <section id="when" aria-labelledby="when-h"><div class="wrap">
+    <div class="sec-head"><span class="label">Timeline</span><h2 id="when-h">Live in about two weeks</h2></div>
+    <div class="steps">
+      <div><h3>Week 1: your details</h3><p>You send the items below. We finish the pages and start the Leafly and JointCommerce claims.</p></div>
+      <div><h3>Week 2: review</h3><p>You check the site on your own phone. We make your changes.</p></div>
+      <div><h3>Launch</h3><p>We switch on kingkannaok.com, let Google see the site, and confirm your Google listing links to it.</p></div>
+    </div>
+  </div></section>
+
+  <section id="need" aria-labelledby="need-h"><div class="wrap">
+    <div class="sec-head"><span class="label">From you</span><h2 id="need-h">What we need</h2></div>
+    <ul class="need">
+      <li>Access to kingkannaok.com<small>The account it was bought through, so the hold can be lifted</small></li>
+      <li>Manager access to your Google listing<small>So we can add the site and your own photos</small></li>
+      <li>Your logo file<small>The preview uses a photo of your storefront sign</small></li>
+      <li>Your OMMA license number<small>Leafly shows DAAA-4JSH-0NRO under the old name; we&rsquo;ll confirm it&rsquo;s current</small></li>
+      <li>A yes on the Instagram photos<small>They&rsquo;re yours; we just want your OK to use them on the site</small></li>
+      <li>Your menu system, if you want the live menu<small>Which system runs your register</small></li>
+    </ul>
+    <p class="rules"><b style="color:var(--text)">Rules we build to.</b> The site is for licensed Oklahoma patients and caregivers, so a patient gate stays at the door and the site makes no health claims. Deals and giveaways link out to your Instagram. Before we put any deal on the site itself, we&rsquo;ll check the current OMMA advertising rules with you, because the state has been changing them this year.</p>
+  </div></section>
+
+  <section class="close" aria-labelledby="close-h"><div class="wrap">
+    <h2 id="close-h">Ready when you are.</h2>
+    <p>Say yes and we start this week. Send any questions about this proposal to the same address.</p>
+    <span class="mail">main@station.solutions</span>
+    <a class="btn btn-leaf" href="mailto:main@station.solutions?subject=King%20Kanna%20website">Email Station</a>
+  </div></section>
+</main>
+
+<footer><div class="wrap"><span>Prepared for King Kanna, 29 Sep 2026. Google and listing figures as recorded that day.</span><span>Designed by <a href="https://station.solutions/" target="_blank" rel="noopener">Station.Solutions</a></span></div></footer>
+</body>
+</html>
