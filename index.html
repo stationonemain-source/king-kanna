@@ -459,7 +459,7 @@ footer .wrap { display:flex; flex-direction:column; gap:22px }
     show(layers.run, inRun);
     if (inRun) {
       // hold on each panel, then glide to the next: [start, end] of the three moves
-      var moves = [[0.12, 0.3], [0.42, 0.6], [0.74, 0.93]], pos = 0;
+      var moves = [[0.08, 0.3], [0.38, 0.62], [0.7, 0.95]], pos = 0;
       moves.forEach(function (m) { pos += ease(seg(kr, m[0], m[1])); });
       var x = -VW * pos;
       track.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)';
@@ -513,7 +513,7 @@ footer .wrap { display:flex; flex-direction:column; gap:22px }
   ScrollTrigger.config({ ignoreMobileResize: true });
   var P = 0;
   var film = ScrollTrigger.create({
-    trigger: '#film', start: 'top top', end: function () { return '+=' + Math.round(innerHeight * 11); },
+    trigger: '#film', start: 'top top', end: function () { return '+=' + Math.round(innerHeight * 5.5); },
     pin: true, pinSpacing: true, anticipatePin: 1,
     onUpdate: function (self) { P = self.progress; }
   });
