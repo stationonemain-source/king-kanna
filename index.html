@@ -8,6 +8,7 @@
 <meta name="description" content="King Kanna: medical cannabis dispensary at 541 S University Blvd on Campus Corner, Norman. Open noon to midnight Monday to Saturday.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&family=Libre+Franklin:wght@400;500;600;700;800&display=swap">
+<link rel="preload" as="image" href="img/w/storefront.jpg">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Store","name":"King Kanna","telephone":"+1-405-857-7633",
  "address":{"@type":"PostalAddress","streetAddress":"541 S University Blvd","addressLocality":"Norman","addressRegion":"OK","postalCode":"73069","addressCountry":"US"},
@@ -16,135 +17,188 @@
  "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"12:00","closes":"00:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Sunday","opens":"12:00","closes":"22:00"}]}
 </script>
 <style>
-/* Layout: a plain store site in King Kanna's sign colours (black lettering on white, the lion's purple mane and teal crown). Photo hero, their Instagram photos, a shelf list, a visit block. */
+/* Layout: "Noon to Midnight". One pinned stage plays a single continuous shot through King Kanna's day,
+   built only from the store's own photos: storefront at noon -> through the door -> a sideways run through the
+   shelves -> the lion and the prize wheel -> the pink neon at midnight. Then the page melts into the visit info. */
 :root {
-  --bg:#ffffff; --tint:#f5f3f8; --ink:#121212; --text:#1f1d24; --text-2:#56525f; --line:#e2dfe8;
-  --purple:#3b2f9e; --purple-dk:#2c2379; --teal:#2f9e86; --open:#1f7a4d;
+  --night:#0b090f; --night-2:#15121c; --line:rgba(235,225,255,.14);
+  --text:#f1edf8; --text-2:#b9b2c9; --muted:#8a8398;
+  --purple:#3b2f9e; --lilac:#b4a8ff; --teal:#63d6b8; --neon:#ff49b0; --warm:#ffb45c; --sign:#ffffff; --ink:#121212;
   --f-sign:'Rye', Georgia, 'Times New Roman', serif; --f-body:'Libre Franklin', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme:dark;
 }
 * { box-sizing:border-box }
 [hidden] { display:none !important }
-html { scroll-behavior:smooth }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto } }
-body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 var(--f-body); -webkit-font-smoothing:antialiased }
-img { max-width:100%; height:auto; display:block }
+html, body { margin:0 }
+body { background:var(--night); color:var(--text); font:16px/1.6 var(--f-body); -webkit-font-smoothing:antialiased; overflow-x:hidden }
+img { max-width:100%; display:block }
 a { color:inherit }
-h1, h2, h3 { margin:0; text-wrap:balance }
+h1, h2, h3 { margin:0; font-weight:400; text-wrap:balance }
 p { margin:0 }
-:focus-visible { outline:3px solid var(--purple); outline-offset:3px }
+:focus-visible { outline:3px solid var(--teal); outline-offset:3px }
+.btn { display:inline-flex; align-items:center; justify-content:center; font:700 15px/1 var(--f-body); text-decoration:none; padding:14px 20px; border-radius:6px; border:2px solid rgba(255,255,255,.7); color:#fff; background:transparent; cursor:pointer; white-space:nowrap }
+.btn:hover { background:rgba(255,255,255,.08) }
+.btn.go { background:var(--purple); border-color:var(--purple) }
+.btn.go:hover { background:#4a3cc0; border-color:#4a3cc0 }
+.btn.pink { background:var(--neon); border-color:var(--neon); color:#1a0612 }
+
+/* header */
+.hdr { position:fixed; top:0; left:0; right:0; z-index:40; padding:calc(env(safe-area-inset-top, 0px) + 10px) 20px 22px;
+  display:flex; align-items:center; gap:18px; background:linear-gradient(rgba(11,9,15,.72), rgba(11,9,15,0)); pointer-events:none }
+.hdr > * { pointer-events:auto }
+.hdr .logo { background:var(--sign); border-radius:6px; padding:4px 7px; line-height:0 }
+.hdr .logo img { width:84px; height:auto }
+.clock { margin-left:auto; display:flex; flex-direction:column; align-items:flex-end; gap:5px; color:#fff; text-shadow:0 1px 8px rgba(0,0,0,.5) }
+.clock b { font:400 26px/1 var(--f-sign); font-variant-numeric:tabular-nums; letter-spacing:.01em }
+.clock span { font:700 11px/1 var(--f-body); letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.8) }
+.clock i { display:block; width:150px; height:2px; background:rgba(255,255,255,.25); border-radius:2px; overflow:hidden }
+.clock i u { display:block; height:100%; width:100%; background:var(--neon); transform-origin:0 50%; transform:scaleX(0) }
+.hdr .call { font:700 14px var(--f-body); text-decoration:none; color:#fff; border:1.5px solid rgba(255,255,255,.6); border-radius:6px; padding:9px 12px; background:rgba(0,0,0,.25) }
+
+/* the film */
+.film { position:relative; height:100vh; height:100lvh; overflow:hidden; background:var(--night) }
+.layer { position:absolute; inset:0; overflow:hidden }
+.cam { position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform }
+.cam > img { width:100%; height:100%; display:block }
+.fill { position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+#doorView { will-change:clip-path }
+.dusk { position:absolute; inset:0; pointer-events:none; opacity:0;
+  background:linear-gradient(180deg, rgba(255,140,60,.55) 0%, rgba(160,60,120,.35) 45%, rgba(40,20,70,.25) 100%); mix-blend-mode:multiply }
+.shade { position:absolute; inset:0; pointer-events:none; background:#07050b; opacity:0 }
+.scrim { position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(90deg, rgba(8,6,12,.72) 0%, rgba(8,6,12,.35) 38%, rgba(8,6,12,0) 62%) }
+
+/* the run through the store */
+.track { position:absolute; left:0; top:0; height:100%; display:flex; will-change:transform }
+.panel { position:relative; width:100vw; height:100%; flex:none; overflow:hidden }
+.panel.split { display:grid; grid-template-columns:1fr 1fr; background:var(--night-2) }
+.panel.split .ph { position:relative; overflow:hidden }
+.panel.split .ph img { position:absolute; inset:-6% -6%; width:112%; height:112%; object-fit:cover; will-change:transform }
+.panel.split .copy { display:flex; flex-direction:column; justify-content:center; gap:18px; padding:8vw 6vw; will-change:transform }
+.panel.split h3 { font:400 clamp(34px,4.4vw,64px)/1.02 var(--f-sign); color:#fff }
+.panel.split p { font-size:clamp(16px,1.4vw,20px); color:var(--text-2); max-width:34ch }
+.panel.list { background:var(--night); display:flex; align-items:center; padding:0 7vw }
+.panel.list ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.2em; font:400 clamp(34px,6.2vw,96px)/1.05 var(--f-sign) }
+.panel.list li { will-change:transform; white-space:nowrap }
+.panel.list li:nth-child(odd) { color:#fff }
+.panel.list li:nth-child(even) { color:var(--lilac) }
+.panel.list .tag { position:absolute; right:6vw; bottom:12vh; font:700 12px/1 var(--f-body); letter-spacing:.18em; text-transform:uppercase; color:var(--teal) }
+
+/* the prize wheel sits on the lion photo, fitted to the real wheel */
+.wheel { position:absolute; left:21.441%; top:37.833%; width:38.112%; aspect-ratio:1/1; transform:translate(-50%,-50%) scaleY(.9733) }
+.wheel img { width:100%; height:100%; will-change:transform; border-radius:50% }
+.wheel::after { content:""; position:absolute; inset:-1.6%; border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle closest-side, transparent 95.5%, #c62a2f 96.5%, #b3222a 100%) }
+
+/* neon */
+#neon .fill { filter:brightness(.04) saturate(.6); will-change:filter,opacity; object-position:50% 30%; transform:scale(1.08) translateY(-9%) }
+#neon .glow { position:absolute; inset:0; pointer-events:none; background:radial-gradient(60% 45% at 52% 38%, rgba(255,73,176,.28), rgba(255,73,176,0) 70%); opacity:0; mix-blend-mode:screen }
+.melt { position:absolute; left:0; right:0; bottom:0; height:38%; pointer-events:none; background:linear-gradient(rgba(11,9,15,0), var(--night)); opacity:0 }
+
+/* beats: copy over the film */
+.beat { position:absolute; z-index:10; opacity:0; pointer-events:none; will-change:opacity,transform }
+.beat.on { pointer-events:auto }
+.beat.hero { left:6vw; bottom:14vh; max-width:min(640px, 88vw) }
+.hero .word { font:400 clamp(58px,9.5vw,150px)/.92 var(--f-sign); color:#fff; display:block; overflow:hidden; padding-bottom:.06em }
+.hero .word span { display:inline-block; will-change:transform }
+.hero .sub { margin-top:18px; font-size:clamp(16px,1.5vw,20px); color:#e9e4f3; max-width:40ch }
+.status { margin-top:16px; display:inline-flex; font:700 14px var(--f-body); color:#fff; background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.25); border-radius:999px; padding:8px 14px }
+.status.open { color:#9ef0d6; border-color:rgba(99,214,184,.55) }
+.beat.cap { left:6vw; bottom:12vh; max-width:min(560px, 86vw) }
+.cap h2 { font:400 clamp(34px,4.8vw,70px)/1 var(--f-sign); color:#fff; text-shadow:0 2px 30px rgba(0,0,0,.45) }
+.cap p { margin-top:12px; font-size:clamp(16px,1.4vw,19px); color:#efeaf7; text-shadow:0 1px 12px rgba(0,0,0,.6) }
+.beat.right { left:auto; right:6vw; text-align:right }
+.beat.finale { left:0; right:0; bottom:7vh; text-align:center; display:flex; flex-direction:column; align-items:center; gap:14px; padding:0 20px }
+.finale h2 { font:400 clamp(40px,5.6vw,88px)/.95 var(--f-sign); color:#fff; text-shadow:0 0 40px rgba(255,73,176,.35) }
+.finale p { font-size:clamp(16px,1.5vw,20px); color:#f3dcef }
+.finale .acts { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:6px }
+
+/* static fallback (reduced motion or no script) */
+.static-film { display:none }
+html.static .film { display:none }
+html.static .static-film { display:block }
+.static-film figure { margin:0; position:relative }
+.static-film img { width:100%; height:78vh; object-fit:cover }
+.static-film figcaption { position:absolute; left:20px; bottom:20px; right:20px; font:400 clamp(28px,5vw,56px)/1.05 var(--f-sign); color:#fff; text-shadow:0 2px 20px rgba(0,0,0,.6) }
+
+/* after the film */
+.after { position:relative; z-index:2; background:var(--night) }
 .wrap { max-width:1180px; margin:0 auto; padding-inline:20px }
-.btn { display:inline-flex; align-items:center; justify-content:center; font:700 15px/1 var(--f-body); text-decoration:none; padding:13px 18px; border-radius:6px; border:2px solid var(--ink); color:var(--ink); background:#fff; cursor:pointer; white-space:nowrap }
-.btn:hover { background:var(--tint) }
-.btn.go { background:var(--purple); border-color:var(--purple); color:#fff }
-.btn.go:hover { background:var(--purple-dk); border-color:var(--purple-dk) }
-.btn.sm { padding:9px 13px; font-size:14px }
-
-.top { position:sticky; top:env(safe-area-inset-top, 0px); z-index:20; background:#fff; border-bottom:3px solid var(--purple) }
-.top .wrap { display:flex; align-items:center; gap:28px; padding-block:8px }
-.logo img { width:120px }
-.top nav { display:flex; gap:24px; font-weight:600; font-size:15px }
-.top nav a { text-decoration:none; color:var(--text-2) }
-.top nav a:hover { color:var(--ink) }
-.top .call { margin-left:auto; text-align:right; line-height:1.2; text-decoration:none }
-.top .call b { display:block; font-size:18px; color:var(--ink) }
-.top .call span { font-size:12.5px; color:var(--text-2) }
-
-.hero .wrap { display:grid; grid-template-columns:1fr 1.1fr; gap:48px; align-items:center; padding-block:44px 28px }
-.hero .wrap > * { min-width:0 }
-.hero h1 { font:400 clamp(38px,4.8vw,62px)/1.05 var(--f-sign); color:var(--ink) }
-.hero h1 span { color:var(--purple) }
-.hero .lede { margin-top:18px; font-size:18px; color:var(--text-2); max-width:44ch }
-.visit-box { margin-top:26px; border:1px solid var(--line); border-radius:8px; padding:16px; display:grid; grid-template-columns:1fr auto; gap:2px 14px; align-items:center }
-.visit-box b { font-size:16px; color:var(--ink) }
-.visit-box .addr { font-size:14px; color:var(--text-2) }
-.now { font-size:14px; font-weight:700; color:var(--text-2) }
-.now.open { color:var(--open) }
-.visit-box .acts { grid-row:1 / span 3; grid-column:2; display:flex; gap:8px }
-.hero figure { margin:0 }
-.hero figure img { width:100%; border-radius:8px; aspect-ratio:6/5; object-fit:cover }
-
-.strip .wrap { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; padding-block:12px 56px }
-.strip figure { margin:0; min-width:0 }
-.strip img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:8px }
-.strip figcaption { margin-top:8px; font-weight:700; color:var(--ink) }
-
-section.block { padding-block:56px; border-top:1px solid var(--line) }
-section.block.tint { background:var(--tint) }
-.block h2 { font:400 clamp(30px,3.4vw,42px)/1.1 var(--f-sign); color:var(--ink) }
-.block .intro { margin-top:10px; color:var(--text-2); font-size:17px; max-width:62ch }
-
-.two { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start }
-.two > * { min-width:0 }
-.two figure { margin:0 }
-.two figure img { border-radius:8px; width:100% }
-.shelf { list-style:none; margin:22px 0 0; padding:0; border-top:2px solid var(--ink) }
-.shelf li { padding:12px 0; border-bottom:1px solid var(--line); font-size:18px; font-weight:700; color:var(--ink) }
-.note { margin-top:16px; font-size:15.5px; color:var(--text-2) }
-.note a { color:var(--purple); font-weight:700 }
-
-.wheel { display:grid; grid-template-columns:.8fr 1.2fr; gap:40px; align-items:center }
-.wheel > * { min-width:0 }
-.wheel img { border-radius:8px; width:100%; aspect-ratio:1/1; object-fit:cover; object-position:50% 40% }
-.wheel p { font-size:17.5px; color:var(--text-2); margin-top:14px; max-width:50ch }
-
-.hours { margin-top:18px; border-collapse:collapse; font-size:16px; font-variant-numeric:tabular-nums; width:100%; max-width:420px }
-.hours td { padding:8px 0; border-bottom:1px solid var(--line) }
+.block { padding-block:clamp(56px,8vw,100px); border-top:1px solid var(--line) }
+.block:first-child { border-top:0 }
+.block h2 { font:400 clamp(32px,4vw,52px)/1.05 var(--f-sign); color:#fff }
+.intro { margin-top:10px; color:var(--text-2); font-size:17px; max-width:62ch }
+.visit { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start }
+.visit > * { min-width:0 }
+.visit figure { margin:0 }
+.visit figure img { width:100%; border-radius:8px; aspect-ratio:6/5; object-fit:cover }
+.addr { margin-top:14px; font-size:20px; font-weight:700; color:#fff }
+.now { margin-top:6px; font-weight:700; color:var(--text-2) }
+.now.open { color:#8eecce }
+.hours { margin-top:18px; border-collapse:collapse; width:100%; max-width:440px; font-variant-numeric:tabular-nums }
+.hours td { padding:9px 0; border-bottom:1px solid var(--line) }
 .hours td:last-child { text-align:right; color:var(--text-2) }
-.hours tr.today td { font-weight:700; color:var(--ink) }
+.hours tr.today td { color:#fff; font-weight:700 }
 .facts { margin:18px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px; color:var(--text-2) }
-.facts b { color:var(--ink) }
-.visit .acts { margin-top:18px; display:flex; flex-wrap:wrap; gap:10px }
-.addr-big { margin-top:14px; font-size:19px; font-weight:700; color:var(--ink) }
-
-.fv { margin-top:22px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px }
-.fv > div { border-top:2px solid var(--ink); padding-top:14px; display:flex; flex-direction:column; gap:6px; min-width:0 }
-.fv h3 { font-size:18px; color:var(--ink) }
+.facts b { color:#fff }
+.acts { margin-top:20px; display:flex; flex-wrap:wrap; gap:10px }
+.fv { margin-top:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px }
+.fv > div { border-top:2px solid var(--lilac); padding-top:14px; display:flex; flex-direction:column; gap:6px; min-width:0 }
+.fv h3 { font:700 18px/1.3 var(--f-body); color:#fff }
 .fv p { color:var(--text-2) }
-.fv a { color:var(--purple); font-weight:600 }
-.follow { margin-top:34px; display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; font-weight:600 }
-
-footer { background:var(--ink); color:#cfcbd8; padding-block:40px 110px; font-size:14px }
+.fv a { color:var(--lilac); font-weight:600 }
+.follow { margin-top:36px; display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; font-weight:600; color:var(--text-2) }
+.follow .btn { padding:10px 14px; font-size:14px }
+footer { border-top:1px solid var(--line); padding-block:40px 110px; font-size:14px; color:var(--text-2) }
 footer .wrap { display:flex; flex-direction:column; gap:22px }
 .f-top { display:flex; flex-wrap:wrap; gap:24px 56px; align-items:flex-start }
-.f-top .logo { background:#fff; padding:6px 10px; border-radius:6px }
+.f-top .logo { background:var(--sign); padding:6px 10px; border-radius:6px; line-height:0 }
+.f-top .logo img { width:110px; height:auto }
 .f-top b { color:#fff; display:block }
-.legal { font-size:12.5px; color:#a9a4b6; display:flex; flex-direction:column; gap:6px; max-width:82ch }
-.f-base { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; font-size:12.5px; color:#a9a4b6; border-top:1px solid rgba(255,255,255,.14); padding-top:14px }
+.legal { font-size:12.5px; color:var(--muted); display:flex; flex-direction:column; gap:6px; max-width:82ch }
+.f-base { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:14px }
 .f-base a { color:#fff }
 
 .dock { display:none }
 
-.gate { position:fixed; inset:0; z-index:50; background:rgba(18,18,18,.92); display:grid; place-items:center; padding:20px }
-.gate-card { background:#fff; border-radius:10px; padding:28px; max-width:430px; width:100%; display:flex; flex-direction:column; gap:16px; text-align:center }
-.gate-card img { width:190px; align-self:center }
-.gate-card h2 { font:400 26px/1.1 var(--f-sign); color:var(--ink) }
-.gate-card p { color:var(--text-2); font-size:15px }
-.gate-card .acts { display:flex; gap:10px; justify-content:center }
+/* patient gate */
+.gate { position:fixed; inset:0; z-index:60; background:rgba(8,6,12,.94); display:grid; place-items:center; padding:20px }
+.gate-card { background:#fff; color:var(--ink); border-radius:10px; padding:28px; max-width:430px; width:100%; display:flex; flex-direction:column; gap:16px; text-align:center }
+.gate-card img { width:180px; height:auto; align-self:center }
+.gate-card h2 { font:400 26px/1.1 var(--f-sign) }
+.gate-card p { color:#555060; font-size:15px }
+.gate-card .acts { justify-content:center; margin:0 }
+.gate-card .btn { color:var(--ink); border-color:var(--ink) }
+.gate-card .btn.go { color:#fff; border-color:var(--purple) }
 .gate-no { color:var(--ink); font-weight:600 }
 
-@media (max-width:980px) {
-  .hero .wrap, .two, .wheel { grid-template-columns:1fr }
-  .top nav { display:none }
-}
-@media (max-width:620px) {
-  .strip .wrap { gap:10px }
+@media (max-width:820px) {
+  .visit { grid-template-columns:1fr }
   .fv { grid-template-columns:1fr }
-  .visit-box { grid-template-columns:1fr }
-  .visit-box .acts { grid-row:auto; grid-column:1; margin-top:8px }
-  .top .call { display:none }
-  .logo img { width:104px }
-  .hero .wrap { padding-block:26px 20px; gap:26px }
-  .dock { display:grid; grid-template-columns:repeat(3,1fr); position:fixed; left:0; right:0; bottom:0; z-index:30; background:#fff; border-top:2px solid var(--purple); padding-bottom:env(safe-area-inset-bottom, 0px) }
-  .dock a { text-decoration:none; text-align:center; padding:13px 4px; font-weight:700; font-size:14px; color:var(--ink) }
+  .panel.split { grid-template-columns:1fr; grid-template-rows:55% 45% }
+  .panel.split .copy { padding:22px 22px 34px; justify-content:flex-start }
+  .clock i { width:96px }
+  .clock b { font-size:21px }
+  .hdr .call { display:none }
+  .beat.hero { bottom:12vh }
+  .beat.right { left:6vw; right:6vw; text-align:left }
+  .dock { display:grid; grid-template-columns:repeat(3,1fr); position:fixed; left:0; right:0; bottom:0; z-index:45; background:rgba(11,9,15,.94); border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom, 0px) }
+  .dock a { text-decoration:none; text-align:center; padding:13px 4px; font-weight:700; font-size:14px; color:#fff }
   .dock a + a { border-left:1px solid var(--line) }
+  .dock a:first-child { color:var(--teal) }
+  .scrim { background:linear-gradient(0deg, rgba(8,6,12,.94) 0%, rgba(8,6,12,.84) 42%, rgba(8,6,12,0) 72%) }
+  #neon .fill { object-fit:contain; object-position:50% 22%; transform:none;
+    -webkit-mask-image:linear-gradient(transparent 0%, #000 12%, #000 62%, transparent 80%); mask-image:linear-gradient(transparent 0%, #000 12%, #000 62%, transparent 80%) }
+  #neon .glow { background:radial-gradient(70% 30% at 50% 30%, rgba(255,73,176,.3), rgba(255,73,176,0) 70%) }
 }
 </style>
+<noscript><style>.film{display:none}.static-film{display:block}.gate{display:none}</style></noscript>
 </head>
 <body>
 
 <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h">
   <div class="gate-card">
-    <img src="img/logo.png" alt="King Kanna Dispensary" width="529" height="330">
+    <img src="img/w/logo.png" alt="King Kanna Dispensary" width="529" height="330">
     <h2 id="gate-h">Patients only</h2>
     <p>This website is for Oklahoma medical marijuana patients and caregivers. Are you 18 or older, with a valid patient or caregiver license?</p>
     <div class="acts"><button class="btn go" id="gate-yes" type="button">Yes, enter</button><button class="btn" id="gate-no-btn" type="button">No</button></div>
@@ -152,114 +206,133 @@ footer .wrap { display:flex; flex-direction:column; gap:22px }
   </div>
 </div>
 
-<header class="top">
-  <div class="wrap">
-    <a class="logo" href="#top" aria-label="King Kanna home"><img src="img/logo.png" alt="King Kanna Dispensary" width="529" height="330"></a>
-    <nav aria-label="Main"><a href="#shelves">On the shelves</a><a href="#wheel">Prize wheel</a><a href="#visit">Visit</a><a href="#first-visit">First visit</a></nav>
-    <a class="call" href="tel:+14058577633"><b>405-857-7633</b><span>541 S University Blvd</span></a>
-  </div>
+<header class="hdr">
+  <a class="logo" href="#top" aria-label="King Kanna, back to top"><img src="img/w/logo.png" alt="King Kanna Dispensary" width="529" height="330"></a>
+  <div class="clock" aria-hidden="true"><span id="chap">Noon</span><b id="clk">12:00 PM</b><i><u id="bar"></u></i></div>
+  <a class="call" href="tel:+14058577633">405-857-7633</a>
 </header>
 
 <main id="top">
-  <section class="hero" aria-labelledby="hero-h">
-    <div class="wrap">
-      <div>
-        <h1 id="hero-h">Welcome to <span>King Kanna.</span></h1>
-        <p class="lede">Medical cannabis dispensary on Campus Corner, a block from OU. Open noon to midnight, Monday to Saturday, and noon to 10 on Sunday.</p>
-        <div class="visit-box" aria-label="Today at King Kanna">
-          <b>541 S University Blvd</b>
-          <span class="addr">Norman, OK 73069 &middot; cash only</span>
-          <span class="now" id="now">Open daily from noon</span>
-          <span class="acts"><a class="btn go sm" href="tel:+14058577633">Call</a><a class="btn sm" href="https://www.google.com/maps/dir/?api=1&amp;destination=King+Kanna+541+S+University+Blvd+Norman+OK+73069" target="_blank" rel="noopener">Map</a></span>
+  <section class="film" id="film" aria-label="A day at King Kanna, from noon to midnight">
+    <!-- 1 + 2: the storefront at noon, then through the door -->
+    <div class="layer" id="store">
+      <div class="cam" id="storeCam"><img src="img/w/storefront.jpg" alt="" width="1440" height="1920"></div>
+      <div class="dusk" id="dusk"></div>
+      <div class="scrim" id="scrim"></div>
+    </div>
+    <div class="layer" id="doorView" style="clip-path:inset(50% 50% 50% 50%)"><img class="fill" src="img/w/inside.jpg" alt="" width="1440" height="791"></div>
+
+    <!-- 3: the run through the store -->
+    <div class="layer" id="run" style="visibility:hidden">
+      <div class="track" id="track">
+        <div class="panel"><img class="fill" id="p1img" src="img/w/inside.jpg" alt="Inside King Kanna: glass counters, the lion statue and the prize wheel" width="1440" height="791"></div>
+        <div class="panel split">
+          <div class="ph"><img id="p2img" src="img/w/packs.jpg" alt="King Kanna pre-roll packs on the glass counter" width="1024" height="1200"></div>
+          <div class="copy" id="p2copy"><h3>Pre-rolls, singles and packs.</h3><p>Five for $20, and packs of forty when they&rsquo;re in. Stop by and see what&rsquo;s on the glass today.</p></div>
         </div>
+        <div class="panel list">
+          <ul id="shelfList"><li>Flower</li><li>Pens</li><li>Gummy packs</li><li>Infused mini j&rsquo;s</li><li>THC lemonade</li><li>CBD pet products</li></ul>
+          <span class="tag">On the shelves at King Kanna</span>
+        </div>
+        <div class="panel"><img class="fill" src="img/w/lion.jpg" alt="" width="1206" height="1600"></div>
       </div>
-      <figure><img src="img/banner.jpg" alt="The King Kanna Dispensary banner with the crowned lion, outside the store on University Blvd" width="1440" height="1195"></figure>
+      <div class="shade" id="runShade"></div>
+    </div>
+
+    <!-- 4: the lion and the prize wheel -->
+    <div class="layer" id="lion" style="visibility:hidden">
+      <div class="cam" id="lionCam">
+        <img src="img/w/lion.jpg" alt="" width="1206" height="1600">
+        <div class="wheel"><img id="disc" src="img/w/wheel-disc.webp" alt="" width="760" height="760"></div>
+      </div>
+      <div class="shade" id="lionShade"></div>
+    </div>
+
+    <!-- 5: midnight -->
+    <div class="layer" id="neon" style="visibility:hidden">
+      <img class="fill" src="img/w/neon.jpg" alt="" width="1800" height="1357" id="neonImg">
+      <div class="glow" id="glow"></div>
+      <div class="melt" id="melt"></div>
+    </div>
+
+    <!-- beats -->
+    <div class="beat hero on" data-in="-0.1" data-peak="0" data-out="0.075" id="heroBeat">
+      <h1 class="word" id="word" aria-label="King Kanna">King Kanna</h1>
+      <p class="sub">Medical cannabis dispensary on Campus Corner, a block from OU.</p>
+      <span class="status" data-now>Open daily from noon</span>
+    </div>
+    <div class="beat cap" data-in="0.085" data-peak="0.13" data-out="0.19"><h2>541 S University Blvd.</h2><p>Open every day from noon. Cash only.</p></div>
+    <div class="beat cap" data-in="0.255" data-peak="0.285" data-out="0.335"><h2>Fully stocked.</h2><p>Flower, pre-rolls, pens, gummies and more. Staff who explain what you&rsquo;re buying.</p></div>
+    <div class="beat cap right" data-in="0.62" data-peak="0.66" data-out="0.73"><h2>Spin the wheel.</h2><p>Spend $50 or more and you get a spin of the prize wheel.</p></div>
+    <div class="beat finale" data-in="0.87" data-peak="0.93" data-out="2">
+      <h2>Open until midnight.</h2>
+      <p>Monday to Saturday, noon to midnight. Sunday, noon to 10.</p>
+      <span class="status" data-now>Open daily from noon</span>
+      <div class="acts"><a class="btn pink" href="tel:+14058577633">Call 405-857-7633</a><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=King+Kanna+541+S+University+Blvd+Norman+OK+73069" target="_blank" rel="noopener">Directions</a></div>
     </div>
   </section>
 
-  <div class="strip" aria-label="Photos from the store">
-    <div class="wrap">
-      <figure><img src="img/packs.jpg" alt="King Kanna pre-roll packs on the glass counter" width="1536" height="1800" loading="lazy"><figcaption>Pre-roll packs</figcaption></figure>
-      <figure><img src="img/neon.jpg" alt="Pink King Kanna neon sign on a wall of leaves" width="1800" height="1357" loading="lazy"><figcaption>The neon</figcaption></figure>
-    </div>
+  <section class="static-film" aria-label="A day at King Kanna">
+    <figure><img src="img/w/storefront.jpg" alt="The King Kanna storefront on University Blvd" width="1440" height="1920"><figcaption>King Kanna, 541 S University Blvd</figcaption></figure>
+    <figure><img src="img/w/inside.jpg" alt="Inside King Kanna" width="1440" height="791" loading="lazy"><figcaption>Fully stocked</figcaption></figure>
+    <figure><img src="img/w/lion.jpg" alt="The King Kanna lion and the prize wheel" width="1206" height="1600" loading="lazy"><figcaption>Spend $50 or more, spin the wheel</figcaption></figure>
+    <figure><img src="img/w/neon.jpg" alt="The pink King Kanna neon sign" width="1800" height="1357" loading="lazy"><figcaption>Open until midnight</figcaption></figure>
+  </section>
+
+  <div class="after">
+    <section class="block" id="visit" aria-labelledby="visit-h">
+      <div class="wrap visit">
+        <div>
+          <h2 id="visit-h">Visit us</h2>
+          <p class="addr">541 S University Blvd, Norman, OK 73069</p>
+          <p class="now" data-now>Open daily from noon</p>
+          <table class="hours" aria-label="Opening hours"><tbody>
+            <tr data-d="1"><td>Monday</td><td>noon &ndash; midnight</td></tr><tr data-d="2"><td>Tuesday</td><td>noon &ndash; midnight</td></tr>
+            <tr data-d="3"><td>Wednesday</td><td>noon &ndash; midnight</td></tr><tr data-d="4"><td>Thursday</td><td>noon &ndash; midnight</td></tr>
+            <tr data-d="5"><td>Friday</td><td>noon &ndash; midnight</td></tr><tr data-d="6"><td>Saturday</td><td>noon &ndash; midnight</td></tr>
+            <tr data-d="0"><td>Sunday</td><td>noon &ndash; 10 pm</td></tr>
+          </tbody></table>
+          <ul class="facts">
+            <li><b>Cash only.</b></li>
+            <li><b>Free parking</b> in the lot and on the street.</li>
+            <li><b>Wheelchair-accessible</b> entrance, parking and seating.</li>
+          </ul>
+          <div class="acts"><a class="btn go" href="tel:+14058577633">Call 405-857-7633</a><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=King+Kanna+541+S+University+Blvd+Norman+OK+73069" target="_blank" rel="noopener">Directions</a></div>
+        </div>
+        <figure><img src="img/w/banner.jpg" alt="The King Kanna Dispensary banner with the crowned lion, outside the store" width="1440" height="1195" loading="lazy"></figure>
+      </div>
+    </section>
+
+    <section class="block" id="first-visit" aria-labelledby="fv-h">
+      <div class="wrap">
+        <h2 id="fv-h">Your first visit</h2>
+        <div class="fv">
+          <div><h3>Bring your card</h3><p>Your Oklahoma medical marijuana patient or caregiver license and a photo ID. Valid medical ID only.</p></div>
+          <div><h3>Bring cash</h3><p>King Kanna is cash only.</p></div>
+          <div><h3>No license yet?</h3><p>Patient licenses are issued by the Oklahoma Medical Marijuana Authority. <a href="https://oklahoma.gov/omma.html" target="_blank" rel="noopener">OMMA patient information</a></p></div>
+        </div>
+        <p class="follow">Deals and giveaways go up first on Instagram:
+          <a class="btn" href="https://www.instagram.com/kingkannanorman/" target="_blank" rel="noopener">@kingkannanorman</a>
+          <a class="btn" href="https://maps.google.com/?cid=14928768663259977885" target="_blank" rel="noopener">Google reviews</a></p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <div class="f-top">
+          <span class="logo"><img src="img/w/logo.png" alt="King Kanna Dispensary" width="529" height="330" loading="lazy"></span>
+          <div><b>King Kanna</b>541 S University Blvd, Norman, OK 73069<br>405-857-7633</div>
+          <div><b>Hours</b>Mon&ndash;Sat noon &ndash; midnight<br>Sun noon &ndash; 10 pm</div>
+        </div>
+        <div class="legal">
+          <p>For use only by Oklahoma medical marijuana patients and caregivers with a valid license. Keep out of reach of children. Do not drive or operate machinery after use.</p>
+          <p>Preview prepared by Station for King Kanna. Every photo is King Kanna&rsquo;s own, from @kingkannanorman; the prize wheel on the lion photo is the real wheel, turned by the page as you scroll. Hours, payment and access details as listed publicly on 29 Sep 2026.</p>
+        </div>
+        <div class="f-base"><span>&copy; 2026 King Kanna</span><span class="credit">Designed by <a href="https://station.solutions/" target="_blank" rel="noopener">Station.Solutions</a></span></div>
+      </div>
+    </footer>
   </div>
-
-  <section class="block tint" id="shelves" aria-labelledby="shelves-h">
-    <div class="wrap two">
-      <div>
-        <h2 id="shelves-h">On the shelves</h2>
-        <p class="intro">We&rsquo;re fully stocked and ready to help you find exactly what you need.</p>
-        <ul class="shelf">
-          <li>Flower</li><li>Pre-rolls, singles and packs</li><li>Pens</li><li>Gummy packs</li><li>Infused mini j&rsquo;s</li><li>THC lemonade</li><li>CBD pet products</li>
-        </ul>
-        <p class="note">Stock and deals change all the time. Call <a href="tel:+14058577633">405-857-7633</a> or check <a href="https://www.instagram.com/kingkannanorman/" target="_blank" rel="noopener">@kingkannanorman</a> before you come in.</p>
-      </div>
-      <figure><img src="img/inside.jpg" alt="Inside King Kanna: glass counters, the lion, the prize wheel and a disco ball" width="1440" height="791" loading="lazy"></figure>
-    </div>
-  </section>
-
-  <section class="block" id="wheel" aria-labelledby="wheel-h">
-    <div class="wrap wheel">
-      <img src="img/lion.jpg" alt="Spin the wheel sign held by the King Kanna lion" width="1357" height="1800" loading="lazy">
-      <div>
-        <h2 id="wheel-h">Spin the wheel</h2>
-        <p>Spend $50 or more and you get a spin of the prize wheel for goodies. Ask at the counter what&rsquo;s on it this week.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="block tint" id="visit" aria-labelledby="visit-h">
-    <div class="wrap two visit">
-      <div>
-        <h2 id="visit-h">Visit us</h2>
-        <p class="addr-big">541 S University Blvd, Norman, OK 73069</p>
-        <p class="now" id="now2" style="margin-top:6px">Open daily from noon</p>
-        <table class="hours" aria-label="Opening hours"><tbody>
-          <tr data-d="1"><td>Monday</td><td>noon &ndash; midnight</td></tr><tr data-d="2"><td>Tuesday</td><td>noon &ndash; midnight</td></tr>
-          <tr data-d="3"><td>Wednesday</td><td>noon &ndash; midnight</td></tr><tr data-d="4"><td>Thursday</td><td>noon &ndash; midnight</td></tr>
-          <tr data-d="5"><td>Friday</td><td>noon &ndash; midnight</td></tr><tr data-d="6"><td>Saturday</td><td>noon &ndash; midnight</td></tr>
-          <tr data-d="0"><td>Sunday</td><td>noon &ndash; 10 pm</td></tr>
-        </tbody></table>
-        <ul class="facts">
-          <li><b>Cash only.</b></li>
-          <li><b>Free parking</b> in the lot and on the street.</li>
-          <li><b>Wheelchair-accessible</b> entrance, parking and seating.</li>
-        </ul>
-        <div class="acts"><a class="btn go" href="tel:+14058577633">Call 405-857-7633</a><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=King+Kanna+541+S+University+Blvd+Norman+OK+73069" target="_blank" rel="noopener">Directions</a></div>
-      </div>
-      <figure><img src="img/storefront.jpg" alt="The King Kanna storefront with its sign, open sign and chalkboard" width="1800" height="1722" loading="lazy"></figure>
-    </div>
-  </section>
-
-  <section class="block" id="first-visit" aria-labelledby="fv-h">
-    <div class="wrap">
-      <h2 id="fv-h">Your first visit</h2>
-      <div class="fv">
-        <div><h3>Bring your card</h3><p>Your Oklahoma medical marijuana patient or caregiver license and a photo ID. Valid medical ID only.</p></div>
-        <div><h3>Bring cash</h3><p>King Kanna is cash only.</p></div>
-        <div><h3>No license yet?</h3><p>Patient licenses are issued by the Oklahoma Medical Marijuana Authority. <a href="https://oklahoma.gov/omma.html" target="_blank" rel="noopener">OMMA patient information</a></p></div>
-      </div>
-      <p class="follow">Deals and giveaways go up first on Instagram:
-        <a class="btn sm" href="https://www.instagram.com/kingkannanorman/" target="_blank" rel="noopener">@kingkannanorman</a>
-        <a class="btn sm" href="https://maps.google.com/?cid=14928768663259977885" target="_blank" rel="noopener">Google reviews</a></p>
-    </div>
-  </section>
 </main>
-
-<footer>
-  <div class="wrap">
-    <div class="f-top">
-      <span class="logo"><img src="img/logo.png" alt="King Kanna Dispensary" width="529" height="330" style="width:120px" loading="lazy"></span>
-      <div><b>King Kanna</b>541 S University Blvd, Norman, OK 73069<br>405-857-7633</div>
-      <div><b>Hours</b>Mon&ndash;Sat noon &ndash; midnight<br>Sun noon &ndash; 10 pm</div>
-    </div>
-    <div class="legal">
-      <p>For use only by Oklahoma medical marijuana patients and caregivers with a valid license. Keep out of reach of children. Do not drive or operate machinery after use.</p>
-      <p>Preview prepared by Station for King Kanna. Photos and product words are from King Kanna&rsquo;s own Instagram (@kingkannanorman). Hours, payment and access details as listed publicly on 29 Sep 2026.</p>
-    </div>
-    <div class="f-base"><span>&copy; 2026 King Kanna</span><span class="credit">Designed by <a href="https://station.solutions/" target="_blank" rel="noopener">Station.Solutions</a></span></div>
-  </div>
-</footer>
 
 <nav class="dock" aria-label="Quick actions">
   <a href="https://www.google.com/maps/dir/?api=1&amp;destination=King+Kanna+541+S+University+Blvd+Norman+OK+73069" target="_blank" rel="noopener">Directions</a>
@@ -267,31 +340,226 @@ footer .wrap { display:flex; flex-direction:column; gap:22px }
   <a href="#visit">Hours</a>
 </nav>
 
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
 <script>
 (function () {
-  var gate = document.getElementById('gate'), ok = false;
-  try { ok = sessionStorage.getItem('kk-gate') === '1'; } catch (e) {}
-  if (ok) gate.hidden = true; else document.getElementById('gate-yes').focus();
-  document.getElementById('gate-yes').addEventListener('click', function () { gate.hidden = true; try { sessionStorage.setItem('kk-gate', '1'); } catch (e) {} });
-  document.getElementById('gate-no-btn').addEventListener('click', function () { document.getElementById('gate-no').hidden = false; });
+  var Q = new URLSearchParams(location.search), JUMP = Q.get('jump');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.gsap || !window.ScrollTrigger;
+  if (reduced) document.documentElement.classList.add('static');
+  if (JUMP !== null) history.scrollRestoration = 'manual';
 
-  // [open, close] in hours, Sunday first; 24 = midnight. Norman's clock (America/Chicago).
+  /* ---------- live hours (Norman clock) ---------- */
   var H = [[12, 22], [12, 24], [12, 24], [12, 24], [12, 24], [12, 24], [12, 24]];
-  function now() {
+  function nowCT() {
     var o = {}; new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false })
       .formatToParts(new Date()).forEach(function (x) { o[x.type] = x.value; });
     return { d: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(o.weekday), h: (parseInt(o.hour, 10) % 24) + parseInt(o.minute, 10) / 60 };
   }
-  function fmt(h) { return h === 24 ? 'midnight' : h === 12 ? 'noon' : ((h % 12 || 12) + (h < 12 ? ' am' : ' pm')); }
-  function tick() {
-    var n = now(), t = H[n.d], open = n.h >= t[0] && n.h < t[1], txt;
-    if (open) txt = 'Open now, until ' + fmt(t[1]);
-    else if (n.h < t[0]) txt = 'Closed, opens at ' + fmt(t[0]) + ' today';
-    else txt = 'Closed, opens at noon tomorrow';
-    ['now', 'now2'].forEach(function (id) { var el = document.getElementById(id); el.textContent = txt; el.classList.toggle('open', open); });
+  function fmtH(h) { return h === 24 ? 'midnight' : h === 12 ? 'noon' : ((h % 12 || 12) + (h < 12 ? ' am' : ' pm')); }
+  function live() {
+    var n = nowCT(), t = H[n.d], open = n.h >= t[0] && n.h < t[1];
+    var txt = open ? 'Open now, until ' + fmtH(t[1]) : (n.h < t[0] ? 'Closed, opens at noon today' : 'Closed, opens at noon tomorrow');
+    document.querySelectorAll('[data-now]').forEach(function (el) { el.textContent = txt; el.classList.toggle('open', open); });
     document.querySelectorAll('.hours tr').forEach(function (r) { r.classList.toggle('today', +r.dataset.d === n.d); });
   }
-  tick(); setInterval(tick, 60000);
+  live(); setInterval(live, 60000);
+
+  /* ---------- patient gate ---------- */
+  var gate = document.getElementById('gate'), ok = JUMP !== null;
+  try { ok = ok || sessionStorage.getItem('kk-gate') === '1'; } catch (e) {}
+  var lenis = null;
+  function enter() { gate.hidden = true; try { sessionStorage.setItem('kk-gate', '1'); } catch (e) {} if (lenis) lenis.start(); }
+  if (ok) gate.hidden = true; else document.getElementById('gate-yes').focus();
+  document.getElementById('gate-yes').addEventListener('click', enter);
+  document.getElementById('gate-no-btn').addEventListener('click', function () { document.getElementById('gate-no').hidden = false; });
+
+  if (reduced) { window.__ready = true; return; }
+
+  /* ---------- helpers ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
+  var ease = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  var VW = innerWidth, VH = innerHeight;
+
+  // A camera over one photo: frames a rectangle (normalised photo coords) and never shows past the photo's edges.
+  function Camera(el, natW, natH, keys) {
+    el.style.width = natW + 'px'; el.style.height = natH + 'px';
+    function frame(r, mode) {
+      var rw = (r[2] - r[0]) * natW, rh = (r[3] - r[1]) * natH;
+      var s = mode === 'cover' ? Math.max(VW / rw, VH / rh) : Math.min(VW / rw, VH / rh);
+      s = Math.max(s, Math.max(VW / natW, VH / natH));
+      return { s: s, cx: (r[0] + r[2]) / 2 * natW, cy: (r[1] + r[3]) / 2 * natH };
+    }
+    var st = { s: 1, tx: 0, ty: 0 };
+    return {
+      state: st,
+      set: function (k) {
+        var i = 0; while (i < keys.length - 2 && k > keys[i + 1].at) i++;
+        var A = keys[i], B = keys[i + 1], t = (A.ease || ease)(seg(k, A.at, B.at));
+        var fa = frame(A.r, A.mode), fb = frame(B.r, B.mode);
+        var s = Math.exp(lerp(Math.log(fa.s), Math.log(fb.s), t));
+        var cx = lerp(fa.cx, fb.cx, t), cy = lerp(fa.cy, fb.cy, t);
+        var tx = VW / 2 - s * cx, ty = VH / 2 - s * cy;
+        tx = clamp(tx, VW - s * natW, 0); ty = clamp(ty, VH - s * natH, 0);
+        st.s = s; st.tx = tx; st.ty = ty;
+        el.style.transform = 'translate3d(' + tx.toFixed(2) + 'px,' + ty.toFixed(2) + 'px,0) scale(' + s.toFixed(5) + ')';
+      }
+    };
+  }
+
+  var DOOR = [0.3799, 0.5302, 0.5819, 0.842];
+  var store = Camera($('storeCam'), 1440, 1920, [
+    { at: 0, r: [0.03, 0.0, 0.97, 0.62] },
+    { at: 0.5, r: [0.27, 0.43, 0.70, 0.93] },
+    { at: 1, r: DOOR, mode: 'cover', ease: function (t) { return t * t * t; } }
+  ]);
+  var lion = Camera($('lionCam'), 1206, 1600, [
+    { at: 0, r: [0, 0, 1, 1] },
+    { at: 0.42, r: [0.0, 0.16, 0.66, 0.70] },
+    { at: 0.72, r: [0.0, 0.16, 0.66, 0.70] },
+    { at: 1, r: [0.47, 0.02, 0.87, 0.44] }
+  ]);
+
+  // chapters: global progress ranges
+  var R = { store: [0, 0.255], run: [0.255, 0.55], lion: [0.55, 0.8], neon: [0.8, 1] };
+  var CH = [[0, 'Noon'], [0.1, 'The door'], [0.255, 'Inside'], [0.55, 'The lion'], [0.8, 'Midnight']];
+  var layers = { store: $('store'), door: $('doorView'), run: $('run'), lion: $('lion'), neon: $('neon') };
+  var beats = [].slice.call(document.querySelectorAll('.beat')).map(function (el) {
+    return { el: el, a: +el.dataset.in, pk: +el.dataset.peak, b: +el.dataset.out };
+  });
+  var track = $('track'), list = [].slice.call($('shelfList').children), disc = $('disc');
+  var spin = 0, lastP = 0, vel = 0, lastDrawn = -1, dirty = true;
+
+  function show(el, on) { var v = on ? 'visible' : 'hidden'; if (el.style.visibility !== v) el.style.visibility = v; }
+  function clockText(p) {
+    var m = Math.round(720 + p * 719), h = Math.floor(m / 60) % 24, mm = m % 60;
+    return ((h % 12) || 12) + ':' + (mm < 10 ? '0' : '') + mm + (h < 12 ? ' AM' : ' PM');
+  }
+
+  function render(p) {
+    // 1 + 2 storefront -> door
+    var ks = seg(p, R.store[0], R.store[1]);
+    var inStore = p < R.store[1];
+    show(layers.store, inStore); show(layers.door, inStore);
+    if (inStore) {
+      store.set(ks);
+      $('dusk').style.opacity = (0.55 * seg(ks, 0.1, 1)).toFixed(3);
+      $('scrim').style.opacity = (1 - seg(ks, 0.0, 0.25)).toFixed(3);
+      var st = store.state, x0 = st.tx + st.s * DOOR[0] * 1440, y0 = st.ty + st.s * DOOR[1] * 1920,
+          x1 = st.tx + st.s * DOOR[2] * 1440, y1 = st.ty + st.s * DOOR[3] * 1920;
+      layers.door.style.clipPath = 'inset(' + Math.max(0, y0).toFixed(1) + 'px ' + Math.max(0, VW - x1).toFixed(1) + 'px ' + Math.max(0, VH - y1).toFixed(1) + 'px ' + Math.max(0, x0).toFixed(1) + 'px)';
+      layers.door.style.opacity = seg(ks, 0.45, 0.8).toFixed(3);
+    }
+    // 3 the run
+    var kr = seg(p, R.run[0], R.run[1]), inRun = p >= R.run[0] && p < R.run[1];
+    show(layers.run, inRun);
+    if (inRun) {
+      // hold on each panel, then glide to the next: [start, end] of the three moves
+      var moves = [[0.12, 0.3], [0.42, 0.6], [0.74, 0.93]], pos = 0;
+      moves.forEach(function (m) { pos += ease(seg(kr, m[0], m[1])); });
+      var x = -VW * pos;
+      track.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)';
+      var local = -x / VW; // 0..3 panels travelled
+      $('p1img').style.transform = 'scale(' + (1 + 0.06 * clamp(local, 0, 1)).toFixed(4) + ')';
+      $('p2img').style.transform = 'translate3d(' + ((local - 1) * 6).toFixed(2) + '%,0,0)';
+      $('p2copy').style.transform = 'translate3d(' + ((local - 1) * -14).toFixed(2) + 'vw,0,0)';
+      list.forEach(function (li, i) { li.style.transform = 'translate3d(' + ((local - 2) * -(10 + i * 7)).toFixed(2) + 'vw,0,0)'; });
+      $('runShade').style.opacity = (0.22 * kr).toFixed(3);
+    }
+    // 4 the lion and the wheel
+    var kl = seg(p, R.lion[0], R.lion[1]), inLion = p >= R.lion[0] && p < R.lion[1];
+    show(layers.lion, inLion);
+    if (inLion) {
+      lion.set(kl);
+      disc.style.transform = 'rotate(' + spin.toFixed(2) + 'deg)';
+      $('lionShade').style.opacity = (0.22 * kl + 0.78 * seg(kl, 0.82, 1)).toFixed(3);
+    }
+    // 5 midnight
+    var kn = seg(p, R.neon[0], R.neon[1]), inNeon = p >= R.neon[0];
+    show(layers.neon, inNeon);
+    if (inNeon) {
+      // the sign buzzes on: two quick flickers, then full glow
+      var on = seg(kn, 0.12, 0.42), f = on;
+      if (kn > 0.15 && kn < 0.19) f = 0.7; else if (kn >= 0.19 && kn < 0.23) f = 0.08; else if (kn >= 0.23 && kn < 0.26) f = 0.85; else if (kn >= 0.26 && kn < 0.29) f = 0.15;
+      var b = lerp(0.04, 1, f);
+      $('neonImg').style.filter = 'brightness(' + b.toFixed(3) + ') saturate(' + lerp(0.6, 1.1, f).toFixed(3) + ')';
+      $('glow').style.opacity = (0.9 * f).toFixed(3);
+      $('melt').style.opacity = seg(kn, 0.86, 1).toFixed(3);
+    }
+    // beats
+    beats.forEach(function (bt) {
+      var a = 0;
+      if (p >= bt.a && p <= bt.b) a = p < bt.pk ? (p - bt.a) / Math.max(1e-4, bt.pk - bt.a) : (bt.b > 1.5 ? 1 : 1 - (p - bt.pk) / Math.max(1e-4, bt.b - bt.pk));
+      a = clamp(a, 0, 1);
+      bt.el.style.opacity = a.toFixed(3);
+      bt.el.style.transform = 'translate3d(0,' + ((1 - a) * (p > bt.pk ? -18 : 18)).toFixed(1) + 'px,0)';
+      bt.el.classList.toggle('on', a > 0.5);
+    });
+    // clock
+    $('clk').textContent = clockText(p);
+    var c = CH[0][1]; CH.forEach(function (x) { if (p >= x[0]) c = x[1]; }); $('chap').textContent = c;
+    $('bar').style.transform = 'scaleX(' + p.toFixed(4) + ')';
+  }
+
+  /* ---------- char-split hero word ---------- */
+  var word = $('word'), txt = word.textContent; word.textContent = '';
+  txt.split('').forEach(function (ch) { var s = document.createElement('span'); s.textContent = ch === ' ' ? ' ' : ch; s.setAttribute('aria-hidden', 'true'); word.appendChild(s); });
+
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
+  var P = 0;
+  var film = ScrollTrigger.create({
+    trigger: '#film', start: 'top top', end: function () { return '+=' + Math.round(innerHeight * 11); },
+    pin: true, pinSpacing: true, anticipatePin: 1,
+    onUpdate: function (self) { P = self.progress; }
+  });
+  // the wheel turns with scroll, and spins faster when you scroll fast
+  gsap.ticker.add(function () {
+    var d = P - lastP; lastP = P;
+    vel = lerp(vel, d, 0.2);
+    var inLion = P >= R.lion[0] && P < R.lion[1];
+    if (inLion) spin += 0.4 + Math.min(Math.abs(vel) * 9000, 30);
+    if (P === lastDrawn && !inLion && !dirty) return;   // nothing moved: skip the frame
+    lastDrawn = P; dirty = false;
+    render(P);
+  });
+
+  function resize() { VW = innerWidth; VH = innerHeight; dirty = true; render(P); }
+  addEventListener('resize', resize);
+
+  if (JUMP === null) {
+    lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
+    if (!gate.hidden) lenis.stop();
+  }
+
+  // hero reveal
+  gsap.from('#word span', { yPercent: 115, duration: 1.1, ease: 'power4.out', stagger: 0.045, delay: 0.25 });
+
+  function ready() {
+    ScrollTrigger.refresh();
+    if (JUMP !== null) {
+      scrollTo(0, +JUMP || 0); ScrollTrigger.update(); P = film.progress; lastP = P;
+      gsap.set('#word span', { yPercent: 0 });
+    }
+    render(P);
+    // jank meter (console): per-frame deltas, max every 2 s
+    var last = performance.now(), mx = 0, deltas = [];
+    (function f(t) { var dd = t - last; last = t; deltas.push(dd); if (dd > mx) mx = dd; requestAnimationFrame(f); })(last);
+    window.__jank = function () { var s = deltas.slice(5).sort(function (a, b) { return a - b; }); return { p95: s[Math.floor(s.length * .95)] || 0, max: s[s.length - 1] || 0, n: s.length }; };
+    window.__spin = function (v) { spin = v; render(P); };   // dev hook for the screenshot harness
+    window.__ready = true;
+  }
+  var imgs = [].slice.call(document.querySelectorAll('.film img'));
+  Promise.all(imgs.map(function (im) { return im.decode ? im.decode().catch(function () {}) : Promise.resolve(); }))
+    .then(function () { return document.fonts ? document.fonts.ready : null; })
+    .then(ready);
 })();
 </script>
 </body>
