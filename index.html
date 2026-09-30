@@ -434,7 +434,8 @@ footer .wrap { display:flex; flex-direction:column; gap:22px }
   var track = $('track'), list = [].slice.call($('shelfList').children), disc = $('disc');
   var spin = 0, lastP = 0, vel = 0, lastDrawn = -1, dirty = true;
 
-  function show(el, on) { var v = on ? 'visible' : 'hidden'; if (el.style.visibility !== v) el.style.visibility = v; }
+  // keep every chapter composited (near-zero opacity instead of hidden) so no photo uploads to the GPU mid-scroll
+  function show(el, on) { var o = on ? '1' : '0.001'; if (el.style.visibility !== 'visible') el.style.visibility = 'visible'; if (el.dataset.o !== o) { el.dataset.o = o; el.style.opacity = o; } }
   function clockText(p) {
     var m = Math.round(720 + p * 719), h = Math.floor(m / 60) % 24, mm = m % 60;
     return ((h % 12) || 12) + ':' + (mm < 10 ? '0' : '') + mm + (h < 12 ? ' AM' : ' PM');
@@ -452,7 +453,7 @@ footer .wrap { display:flex; flex-direction:column; gap:22px }
       var st = store.state, x0 = st.tx + st.s * DOOR[0] * 1440, y0 = st.ty + st.s * DOOR[1] * 1920,
           x1 = st.tx + st.s * DOOR[2] * 1440, y1 = st.ty + st.s * DOOR[3] * 1920;
       layers.door.style.clipPath = 'inset(' + Math.max(0, y0).toFixed(1) + 'px ' + Math.max(0, VW - x1).toFixed(1) + 'px ' + Math.max(0, VH - y1).toFixed(1) + 'px ' + Math.max(0, x0).toFixed(1) + 'px)';
-      layers.door.style.opacity = seg(ks, 0.45, 0.8).toFixed(3);
+      layers.door.style.opacity = Math.max(0.001, seg(ks, 0.45, 0.8)).toFixed(3); layers.door.dataset.o = 'x';
     }
     // 3 the run
     var kr = seg(p, R.run[0], R.run[1]), inRun = p >= R.run[0] && p < R.run[1];
